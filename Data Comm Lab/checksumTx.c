@@ -15,7 +15,7 @@ int main()
         printf("\nenter the segment length: ");
         scanf("%d", &sl);
 
-        for(i = 1; i<=sl/2; i++)
+        for(i = 1; i<=sl; i++)
             if(pow(2, i) == sl){
                 j = 1;
                 break;
