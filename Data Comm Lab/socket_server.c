@@ -1,11 +1,19 @@
-#include <netinet/in.h>
-#include<stdio.h>
-#include<unistd.h>
-#include<arpa/inet.h>
-#include<string.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-int main(int x, char *argv[]){
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#else
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#endif
+
+int main(int x, char *argv[])
+{
     char buf[100];
     int c_check, s_check;
     struct sockaddr_in client, server;
@@ -22,7 +30,8 @@ int main(int x, char *argv[]){
     int size = sizeof(client);
     c_check = accept(s_check, (struct sockaddr *)&client, &size);
 
-    do{
+    do
+    {
         memset(buf, '\0', 100);
         printf("\n enter the data: ");
         fflush(stdin);
@@ -31,10 +40,10 @@ int main(int x, char *argv[]){
         printf("\n client IP address is: %s", inet_ntoa(client.sin_addr));
         recv(c_check, buf, 100, 0);
         printf("recieved message is: %s", buf);
-    }while(strcmp(buf, "bye") != 0);
+    } while (strcmp(buf, "bye") != 0);
 
     close(c_check);
     close(s_check);
 
-    return(0);
+    return (0);
 }

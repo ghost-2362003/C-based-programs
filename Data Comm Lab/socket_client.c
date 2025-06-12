@@ -1,10 +1,18 @@
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
-#include<unistd.h>
-#include<arpa/inet.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#else
+#include <arpa/inet.h>
+#include <unistd.h>
+#endif
 
-int main(int x, char *argv[]){
+int main(int x, char *argv[])
+{
     char buf[100];
     struct sockaddr_in client;
     int c_check;
@@ -17,16 +25,17 @@ int main(int x, char *argv[]){
 
     bind(c_check, (struct sockaddr *)&client, sizeof(client));
 
-    do{
+    do
+    {
         recv(c_check, buf, 100, 0);
         printf("recieved data is: %s\n", buf);
         printf("\nenter the data: ");
         fflush(stdin);
         scanf("%s", buf);
         send(c_check, buf, 100, 0);
-    }while(strcmp(buf, "bye") != 0);
+    } while (strcmp(buf, "bye") != 0);
 
     close(c_check);
 
-    return(0);
+    return (0);
 }
