@@ -1,77 +1,74 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-
 int main()
 {
-    int data1[100], i, j, k = 0, r, dataLen, temp, c;
     char data[100];
-
-    printf("enter the data bits: ");
+    int data1[100], data2[100];
+    int dl, r, i = 0, j = 0, k = 0, z, c;
+    printf("\n Enter the dataword: "); // taking input in string
     scanf("%s", data);
-    dataLen = strlen(data);
+    dl = strlen(data); // length of the input string
 
-    // calculate the number of parity bits
-    while (1)
+    while (1) // finding number of parity bits
     {
-        r = pow(2, k);
-        if (r >= dataLen + k + 1)
-        {
+        if (pow(2, i) >= dl + i + 1)
             break;
-        }
-        k++;
+        i++;
     }
 
-    r = k;
-    k = 0;
+    r = i;
+    printf("\n No of redundant bits: %d \n", r);
 
-    // place the parity bits in the data array
+    for (i = 0; i < dl; i++)
+    {
+        data1[i] = data[i] - 48;
+    }
+
     for (i = 0; i < r; i++)
     {
-        temp = pow(2, i);
-        data1[temp] = 999;
+        z = pow(2, i);
+        data2[z] = 999;
     }
 
-    // fill the remaining places with the datastream bits
-    for (i = dataLen + r; i >= 1; i--)
+    for (i = dl + r; i >= 1; i--)
     {
-        if (data1[i] != 999)
+        if (data2[i] != 999)
         {
-            data1[i] = data[k] - '0';
-            k++;
+            data2[i] = data1[j];
+            j++;
         }
     }
 
-    // calculate the parity bits
     for (i = 0; i < r; i++)
     {
-        c = 0;
-        temp = pow(2, i);
 
-        for (j = temp; j <= dataLen + r; j = temp + k)
+        z = pow(2, i); // finding position of each parity bit
+        c = 0;         // initializing counter c
+        for (j = z; j <= dl + r; j = z + k)
         {
-            for (k = j; k < j + temp; k++)
+            for (k = j; k < z + j; k++)
             {
-                if (k <= dataLen + r)
+                if (k <= dl + r)
                 {
-                    if (data1[k] != 999)
+                    if (data2[k] != 999)
                     {
-                        c += data1[k];
+                        c = c + data2[k];
                     }
                 }
             }
         }
 
-        data1[temp] = c % 2;
+        data2[z] = c % 2; // parity bit value
     }
 
-    printf("\n the codeword is: \n");
-
+    printf("\n The codeword is: ");
     j = 0;
-    for (i = dataLen + r; i >= 0; i--)
+
+    for (i = dl + r; i >= 1; i--)
     {
-        printf("%d", data1[i]);
+        printf("%d", data2[i]);
     }
 
-    return 0;
+    return (0);
 }
